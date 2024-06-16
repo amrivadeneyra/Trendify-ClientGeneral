@@ -9,8 +9,8 @@ import './globals.css'
 const urbanist = Urbanist({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Store',
-  description: 'Store',
+  title: 'TRENDIFY',
+  description: 'TRENDIFY',
 }
 
 export default function RootLayout({
