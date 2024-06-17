@@ -23,7 +23,18 @@ export default function RootLayout({
       <body className={urbanist.className}>
         <ModalProvider />
         <ToastProvider />
-        <Navbar />
+        <div className='fixed top-0 w-full z-30 bg-white'>
+          <Navbar />
+        </div>
+        <div className="bg-red-600 w-full py-3 text-sm px-6 uppercase font-semibold text-white hidden md:block top-16 relative z-10" >
+          <div className='flex flex-row gap-10 justify-center'>
+            <label>Free shipping on orders over $100</label>
+            <label>Free shipping on orders over $100</label>
+            <label>Free shipping on orders over $100</label>
+            <label>Free shipping on orders over $100</label>
+            <label>Free shipping on orders over $100</label>
+          </div>
+        </div>
         {children}
         <Footer />
       </body>
