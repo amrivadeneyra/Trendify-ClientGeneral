@@ -26,14 +26,6 @@ Key Features:
 
 ### Prerequisites
 
-**Node version 14.x**
-
-### Cloning the repository
-
-```shell
-git clone https://github.com/GersonRocha9/ecommerce-store.git
-```
-
 ### Install packages
 
 ```shell
