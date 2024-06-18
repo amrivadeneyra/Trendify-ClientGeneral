@@ -6,7 +6,7 @@ interface BillboardProps {
 
 export const Billboard: React.FC<BillboardProps> = ({ data }) => {
   return (
-    <div className="w-full h-screen overflow-hidden">
+    <div className="w-full md:h-screen h-[500px] overflow-hidden">
       <div
         className="relative w-full h-full bg-cover bg-center"
         style={{
