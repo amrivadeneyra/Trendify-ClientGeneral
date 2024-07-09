@@ -41,9 +41,17 @@ export const Summary = () => {
     window.location = response.data.url
   }
 
+
   const generatePDF = () => {
     const doc = new jsPDF();
 
+    // Configuración de márgenes
+    const marginLeft = 15;
+    const marginRight = 190;
+    const marginTop = 20;
+    const marginBottom = 10;
+
+    // Estilos usando TailwindCSS classes (simulación)
     const styles = {
       title: { fontSize: 18, font: 'helvetica', fontStyle: 'bold', color: 'black' },
       subtitle: { fontSize: 14, font: 'helvetica', fontStyle: 'normal', color: 'gray' },
@@ -52,39 +60,59 @@ export const Summary = () => {
       separator: { height: 1, backgroundColor: 'gray', margin: '10px 0' },
     };
 
-    let startY = 20;
+    let currentY = marginTop;
 
     items.forEach((item, index) => {
       doc.setFont(styles.title.font, styles.title.fontStyle);
       doc.setFontSize(styles.title.fontSize);
       doc.setTextColor(styles.title.color);
-      doc.text(item.name, 15, startY + 10);
+      doc.text(item.name, marginLeft, currentY);
 
       doc.setFont(styles.subtitle.font, styles.subtitle.fontStyle);
       doc.setFontSize(styles.subtitle.fontSize);
       doc.setTextColor(styles.subtitle.color);
-      doc.text(`Category: ${item.category}`, 15, startY + 20);
+      doc.text(`Category: ${item.category.name}`, marginLeft, currentY + 10);
 
       doc.setFont(styles.details.font, styles.details.fontStyle);
       doc.setFontSize(styles.details.fontSize);
       doc.setTextColor(styles.details.color);
-      doc.text(`Size: ${item.size}`, 15, startY + 30);
-      doc.text(`Color: ${item.color}`, 80, startY + 30);
+      doc.text(`Size: ${item.size.name}`, marginLeft, currentY + 20);
+      doc.text(`Color: ${item.color.name}`, marginLeft + 80, currentY + 20);
+
+      if (item.images.length > 0) {
+        const img = new Image();
+        img.src = item.images[0].url;
+
+        const base64Img = getBase64Image(img);
+        doc.addImage(base64Img, 'JPEG', marginLeft, currentY + 30, 50, 50);
+      }
 
       doc.setFont(styles.price.font, styles.price.fontStyle);
       doc.setFontSize(styles.price.fontSize);
       doc.setTextColor(styles.price.color);
-      doc.text(`Price: $${item.price}`, 15, startY + 40);
+      doc.text(`Price: $${item.price}`, marginLeft, currentY + 90);
 
       doc.setDrawColor(styles.separator.backgroundColor);
       doc.setLineWidth(styles.separator.height);
-      doc.line(15, startY + 45, 190, startY + 45);
+      doc.line(marginLeft, currentY + 95, marginRight, currentY + 95);
 
-      startY += 60; // Ajusta según la altura total de la sección
+      currentY += 105;
     });
 
-    doc.save('order.pdf');
 
+    doc.save('order.pdf');
+  };
+
+  const getBase64Image = (img: HTMLImageElement) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    const ctx = canvas.getContext('2d');
+    ctx?.drawImage(img, 0, 0);
+
+    const dataURL = canvas.toDataURL('image/jpeg');
+    return dataURL;
   };
 
 
