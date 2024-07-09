@@ -47,59 +47,74 @@ export const Summary = () => {
 
     // Configuración de márgenes
     const marginLeft = 15;
+    const marginRight = 190;
     const marginTop = 20;
-    const imgWidth = 50;
-    const imgHeight = 50;
-    const lineHeight = 10;
+    const marginBottom = 10;
+
+    // Estilos usando TailwindCSS classes (simulación)
+    const styles = {
+      title: { fontSize: 18, font: 'helvetica', fontStyle: 'bold', color: 'black' },
+      subtitle: { fontSize: 14, font: 'helvetica', fontStyle: 'normal', color: 'gray' },
+      details: { fontSize: 12, font: 'helvetica', fontStyle: 'normal', color: 'black' },
+      price: { fontSize: 14, font: 'helvetica', fontStyle: 'bold', color: 'black' },
+      separator: { height: 1, backgroundColor: 'gray', margin: '10px 0' },
+    };
 
     let currentY = marginTop;
 
     items.forEach((item, index) => {
-      doc.setFontSize(18);
-      doc.setFont('helvetica', 'bold');
+      doc.setFont(styles.title.font, styles.title.fontStyle);
+      doc.setFontSize(styles.title.fontSize);
+      doc.setTextColor(styles.title.color);
       doc.text(item.name, marginLeft, currentY);
 
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Category: ${item.category.name}`, marginLeft, currentY + lineHeight);
-      doc.text(`Size: ${item.size.name}, Color: ${item.color.name}`, marginLeft, currentY + lineHeight * 2);
+      doc.setFont(styles.subtitle.font, styles.subtitle.fontStyle);
+      doc.setFontSize(styles.subtitle.fontSize);
+      doc.setTextColor(styles.subtitle.color);
+      doc.text(`Category: ${item.category.name}`, marginLeft, currentY + 10);
+
+      doc.setFont(styles.details.font, styles.details.fontStyle);
+      doc.setFontSize(styles.details.fontSize);
+      doc.setTextColor(styles.details.color);
+      doc.text(`Size: ${item.size.name}`, marginLeft, currentY + 20);
+      doc.text(`Color: ${item.color.name}`, marginLeft + 80, currentY + 20);
 
       if (item.images.length > 0) {
         const img = new Image();
-        img.crossOrigin = 'Anonymous';
+        img.src = item.images[0].url;
 
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = imgWidth;
-          canvas.height = imgHeight;
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            ctx.drawImage(img, 0, 0, imgWidth, imgHeight);
-            const dataURL = canvas.toDataURL('image/jpeg');
-
-            doc.addImage(dataURL, 'JPEG', marginLeft, currentY + lineHeight * 3, imgWidth, imgHeight);
-            doc.text(`Price: $${item.price}`, marginLeft, currentY + lineHeight * 5);
-            
-            currentY += lineHeight * 6 + imgHeight;
-          } else {
-            console.error('Error get img');
-          }
-        };
-
-        img.src = item.images[0].url; 
-      } else {
-        doc.text(`Price: $${item.price}`, marginLeft, currentY + lineHeight * 3);
-        currentY += lineHeight * 4;
+        const base64Img = getBase64Image(img);
+        doc.addImage(base64Img, 'JPEG', marginLeft, currentY + 30, 50, 50);
       }
 
-      doc.setLineWidth(0.5);
-      doc.line(marginLeft, currentY + lineHeight, 190, currentY + lineHeight);
+      doc.setFont(styles.price.font, styles.price.fontStyle);
+      doc.setFontSize(styles.price.fontSize);
+      doc.setTextColor(styles.price.color);
+      doc.text(`Price: $${item.price}`, marginLeft, currentY + 90);
 
-      currentY += lineHeight * 2;
+      doc.setDrawColor(styles.separator.backgroundColor);
+      doc.setLineWidth(styles.separator.height);
+      doc.line(marginLeft, currentY + 95, marginRight, currentY + 95);
+
+      currentY += 105;
     });
+
 
     doc.save('order.pdf');
   };
+
+  const getBase64Image = (img: HTMLImageElement) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    const ctx = canvas.getContext('2d');
+    ctx?.drawImage(img, 0, 0);
+
+    const dataURL = canvas.toDataURL('image/jpeg');
+    return dataURL;
+  };
+
 
   return (
     <div className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
