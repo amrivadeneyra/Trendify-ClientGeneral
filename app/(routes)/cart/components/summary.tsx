@@ -41,17 +41,13 @@ export const Summary = () => {
     window.location = response.data.url
   }
 
-
   const generatePDF = () => {
     const doc = new jsPDF();
 
-    // Configuración de márgenes
     const marginLeft = 15;
     const marginRight = 190;
     const marginTop = 20;
-    const marginBottom = 10;
 
-    // Estilos usando TailwindCSS classes (simulación)
     const styles = {
       title: { fontSize: 18, font: 'helvetica', fontStyle: 'bold', color: 'black' },
       subtitle: { fontSize: 14, font: 'helvetica', fontStyle: 'normal', color: 'gray' },
@@ -80,10 +76,7 @@ export const Summary = () => {
       doc.text(`Color: ${item.color.name}`, marginLeft + 80, currentY + 20);
 
       if (item.images.length > 0) {
-        const img = new Image();
-        img.src = item.images[0].url;
-
-        const base64Img = getBase64Image(img);
+        const base64Img = item.images[0].url;
         doc.addImage(base64Img, 'JPEG', marginLeft, currentY + 30, 50, 50);
       }
 
@@ -99,22 +92,8 @@ export const Summary = () => {
       currentY += 105;
     });
 
-
     doc.save('order.pdf');
   };
-
-  const getBase64Image = (img: HTMLImageElement) => {
-    const canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height;
-
-    const ctx = canvas.getContext('2d');
-    ctx?.drawImage(img, 0, 0);
-
-    const dataURL = canvas.toDataURL('image/jpeg');
-    return dataURL;
-  };
-
 
   return (
     <div className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
