@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
+import jsPDF from 'jspdf'
 
 export const Summary = () => {
   const searchParams = useSearchParams()
@@ -15,7 +16,8 @@ export const Summary = () => {
 
   useEffect(() => {
     if (searchParams.get('success')) {
-      toast.success('Your order has been placed!')
+      generatePDF()
+      toast.success('Your order has been placedtext!')
       removeAll()
     }
 
@@ -37,6 +39,17 @@ export const Summary = () => {
     )
 
     window.location = response.data.url
+  }
+
+  const generatePDF = () => {
+    const doc = new jsPDF()
+
+    doc.text('Order Summary', 10, 10)
+    items.forEach((item, index) => {
+      doc.text(`${index + 1}. ${item.name} - ${item.price}`, 10, 20 + index * 10)
+    })
+
+    doc.save('order.pdf')
   }
 
   return (
