@@ -8,7 +8,6 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import jsPDF from 'jspdf'
-import 'jspdf-autotable';
 
 export const Summary = () => {
   const searchParams = useSearchParams()
