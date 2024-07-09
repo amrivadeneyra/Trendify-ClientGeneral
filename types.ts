@@ -37,3 +37,19 @@ export interface Color {
   name: string
   value: string
 }
+
+export interface Order {
+  id: string
+  orderItems: OrderItem[]
+  isPaid: Boolean
+  phone: String
+  address: String
+}
+
+export interface OrderItem {
+  id: String
+  orderId: String
+  order: Order
+  productId: String
+  product: Product
+}

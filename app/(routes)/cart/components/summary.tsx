@@ -8,9 +8,11 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import jsPDF from 'jspdf'
+import { getOrders } from '@/actions/get-orders'
 
 export const Summary = () => {
   const searchParams = useSearchParams()
+  const orders = getOrders()
   const items = useCart((state) => state.items)
   const removeAll = useCart((state) => state.removeAll)
 
@@ -18,6 +20,7 @@ export const Summary = () => {
     if (searchParams.get('success')) {
       generatePDF()
       toast.success('Your order has been placed!')
+      console.log(orders)
       removeAll()
     }
 
